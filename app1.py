@@ -17,9 +17,12 @@ def index():
     @ui.refreshable
     def chat_messages():
         with ui.column().classes('w-full px-4 py-2 gap-2 flex-grow overflow-auto').props('id=chat-area'):
-            for user_id, avatar, text in messages:
-                ui.chat_message(avatar=avatar, text=text, sent=user_id==own_id)
-
+            for msg_user_id, msg_avatar, msg_text in messages:
+                ui.chat_message(
+                    avatar=msg_avatar,
+                    text=msg_text,
+                    sent=(msg_user_id != user_id)  # ✅ Your msgs LEFT, others RIGHT
+                )
         ui.run_javascript('''
             const chatArea = document.getElementById('chat-area');
             if (chatArea) {
