@@ -21,19 +21,19 @@ def index():
         chat_messages(user)
 
     with ui.footer().classes('bg-white p-2'):
-    with ui.row().classes('w-full items-center flex-wrap gap-2'):
-        # Avatar
-        with ui.avatar().classes('w-10 h-10'):
-            ui.image(avatar).classes('w-full h-full object-cover rounded-full')
-        # Message input
-        text = ui.input(placeholder='Message…') \
-            .props('rounded outlined') \
-            .classes('flex-grow min-w-[150px]') \
-            .on('keydown.enter', send)
-        # Send button
-        ui.button(icon='send') \
-            .props('rounded') \
-            .classes('w-10 h-10 shrink-0') \
-            .on('click', lambda: send())
+        with ui.row().classes('w-full items-center flex-wrap gap-2'):
+            # Avatar
+            with ui.avatar().classes('w-10 h-10'):
+                ui.image(avatar).classes('w-full h-full object-cover rounded-full')
+            # Message input
+            text = ui.input(placeholder='Message…') \
+                .props('rounded outlined') \
+                .classes('flex-grow min-w-[150px]') \
+                .on('keydown.enter', send)
+            # Send button
+            ui.button(icon='send') \
+                .props('rounded') \
+                .classes('w-10 h-10 shrink-0') \
+                .on('click', lambda: send())
 
 ui.run()
