@@ -19,7 +19,8 @@ def index():
     avatar = f'https://robohash.org/{user}?bgset=bg2'
     with ui.column().classes('w-full items-stretch'):
         chat_messages(user)
-
+    with ui.button().classes('bg-green')
+    
     with ui.footer().classes('bg-white'):
         with ui.row().classes('w-full items-center'):
             with ui.avatar():
