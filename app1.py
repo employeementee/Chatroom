@@ -21,7 +21,7 @@ def index():
                 ui.chat_message(
                     avatar=msg_avatar,
                     text=msg_text,
-                    sent=(msg_user_id != user_id)  # ✅ FLIPPED: your messages on LEFT
+                    sent=(msg_user_id != user_id)  # ✅ Your msgs LEFT, others RIGHT
                 )
         ui.run_javascript('''
             const chatArea = document.getElementById('chat-area');
@@ -30,7 +30,7 @@ def index():
             }
         ''')
 
-    # Background + light overlay
+    # Add background image + light overlay
     ui.add_body_html(f'''
     <style>
         body {{
