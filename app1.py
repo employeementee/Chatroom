@@ -3,24 +3,36 @@ from nicegui import ui
 
 messages = []
 
-@ui.refreshable
-def chat_messages(own_id):
-    with ui.column().classes('w-full px-4 py-2 gap-2 flex-grow overflow-auto'):
-        for user_id, avatar_url, msg in messages:
-            ui.chat_message(avatar=avatar_url, text=msg, sent=(user_id == own_id))
-
 @ui.page('/')
 def index():
+    user_id = str(uuid4())
+    avatar = f'https://robohash.org/{user_id}?bgset=bg2'
+
     def send():
         if text.value.strip():
             messages.append((user_id, avatar, text.value.strip()))
             chat_messages.refresh()
             text.value = ''
 
-    user_id = str(uuid4())
-    avatar = f'https://robohash.org/{user_id}?bgset=bg2'
+    @ui.refreshable
+    def chat_messages():
+        with ui.column().classes('w-full px-4 py-2 gap-2 flex-grow overflow-auto').props('id=chat-area'):
+            for msg_user_id, msg_avatar, msg_text in messages:
+                ui.chat_message(
+                    avatar=msg_avatar,
+                    text=msg_text,
+                    sent=(msg_user_id == user_id)
+                )
 
-    # Add a full-page fixed background
+        # Inject JS to auto-scroll to bottom
+        ui.run_javascript('''
+            const chatArea = document.getElementById('chat-area');
+            if (chatArea) {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        ''')
+
+    # Background image and overlay
     ui.add_body_html(f'''
     <style>
         body {{
@@ -43,21 +55,21 @@ def index():
             content: "";
             position: absolute;
             inset: 0;
-            background-color: rgba(255, 255, 255, 0.6); /* light overlay */
+            background-color: rgba(255, 255, 255, 0.6);
         }}
     </style>
     <div id="bg-image"></div>
     ''')
 
-    # Foreground chat interface
+    # Chat layout
     with ui.column().classes('w-full h-screen justify-between'):
 
         # Header
         with ui.row().classes('w-full bg-white bg-opacity-80 p-4 shadow-md'):
             ui.label('Pepsu Gang Chatroom').classes('text-xl font-semibold text-black')
 
-        # Messages (scrollable area)
-        chat_messages(user_id)
+        # Chat area
+        chat_messages()
 
         # Footer
         with ui.row().classes('w-full bg-white bg-opacity-90 p-2 items-center gap-2'):
