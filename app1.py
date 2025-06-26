@@ -5,7 +5,7 @@ messages = []
 
 @ui.refreshable
 def chat_messages(own_id):
-    with ui.column().classes('w-full px-4 py-2 gap-2 overflow-auto flex-grow'):
+    with ui.column().classes('w-full px-4 py-2 gap-2 flex-grow overflow-auto'):
         for user_id, avatar_url, msg in messages:
             ui.chat_message(avatar=avatar_url, text=msg, sent=(user_id == own_id))
 
@@ -20,19 +20,46 @@ def index():
     user_id = str(uuid4())
     avatar = f'https://robohash.org/{user_id}?bgset=bg2'
 
-    # Main app container with background
-    with ui.column().classes('w-full h-screen justify-between').style(
-        'background-image: url("https://ik.imagekit.io/hvgic7qdf/Image.jpg?updatedAt=1750919438721");'
-        'background-size: cover; background-position: center; background-repeat: no-repeat;'):
+    # Add a full-page fixed background
+    ui.add_body_html(f'''
+    <style>
+        body {{
+            margin: 0;
+            font-family: sans-serif;
+        }}
+        #bg-image {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            background-image: url("https://ik.imagekit.io/hvgic7qdf/Image.jpg?updatedAt=1750919438721");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }}
+        #bg-image::after {{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.6); /* light overlay */
+        }}
+    </style>
+    <div id="bg-image"></div>
+    ''')
 
-        # HEADER
+    # Foreground chat interface
+    with ui.column().classes('w-full h-screen justify-between'):
+
+        # Header
         with ui.row().classes('w-full bg-white bg-opacity-80 p-4 shadow-md'):
             ui.label('Pepsu Gang Chatroom').classes('text-xl font-semibold text-black')
 
-        # CHAT BODY (scrollable)
+        # Messages (scrollable area)
         chat_messages(user_id)
 
-        # FOOTER
+        # Footer
         with ui.row().classes('w-full bg-white bg-opacity-90 p-2 items-center gap-2'):
             with ui.avatar().classes('w-10 h-10'):
                 ui.image(avatar).classes('w-full h-full object-cover rounded-full')
