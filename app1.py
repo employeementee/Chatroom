@@ -17,10 +17,16 @@ def index():
 
     user = str(uuid4())
     avatar = f'https://robohash.org/{user}?bgset=bg2'
-    with ui.column().classes('w-full items-stretch'):
-        chat_messages(user)
+
     with ui.header().classes('bg-black text-white p-4 shadow-md'):
         ui.label('Pepsu Gang Chatroom').classes('text-xl font-semibold')
+
+    with ui.element('div').classes('w-full h-screen flex flex-col').style(
+        'background-image: url("https://ik.imagekit.io/hvgic7qdf/Image.jpg?updatedAt=1750919438721");'
+        'background-size: cover; background-position: center; background-repeat: no-repeat;'):
+            
+    with ui.column().classes('flex-grow w-full overflow-auto px-2 py-4'):
+            chat_messages(user)
 
     # Chat area with background
     with ui.column().classes('w-full items-stretch').style(
